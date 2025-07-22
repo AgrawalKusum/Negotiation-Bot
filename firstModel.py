@@ -29,7 +29,7 @@ class NegotiationEnv(gym.Env):
         self.max_price=10000
         self.max_turns=10
 
-        self.observation_space=Box(low=np.array([self.min_price, self.min_price,0]), high=np.array([self.max_price, self.max_price,self.max_turns]), dtype=np.float32)
+        self.observation_space=Box(low=np.array([0.0,0.0,0.0]), high=np.array([1.0,1.0,1.0]), dtype=np.float32)
 
         self.reset()
 
@@ -43,7 +43,7 @@ class NegotiationEnv(gym.Env):
         return self._get_obs(), {}
     
     def _get_obs(self):
-        return np.array([self.agent_reservation_price, self.current_offer, self.turn], dtype=np.float32)
+        return np.array([self.agent_reservation_price/self.max_price, self.current_offer/self.max_price, self.turn/self.max_turns], dtype=np.float32)
     
 
     def step(self, action):
@@ -61,7 +61,7 @@ class NegotiationEnv(gym.Env):
 
         elif action==1:
             self.done=True
-            reward=0
+            reward=-0.2
         
         elif action==2:
             self.current_offer=np.random.uniform(100,1000)
